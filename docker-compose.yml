@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Slicing Controller
+  slicing-controller:
+    image: python:3.9
+    container_name: slicing-controller
+    ports:
+      - "8080:8080"
+    working_dir: /app
+    volumes:
+      - ./slicing-controller:/app
+    command: pip install flask && python app.py
+
+  # MEC Message Bus
+  mec-message-bus:
+    image: eclipse/mosquitto:latest
+    container_name: mec-message-bus
+    ports:
+      - "1883:1883"
+
+  # MEC Application Example
+  mec-app:
+    image: python:3.9
+    container_name: mec-application
+    working_dir: /app
+    volumes:
+      - ./mec-apps:/app
+    command: python app_server.py
